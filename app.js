@@ -11,8 +11,6 @@ var amountCircles = 5;
 var circles = [];
 
 
-
-
 const canvas = document.getElementById("myCanvas");
 const context = canvas.getContext('2d');
 
@@ -57,7 +55,7 @@ function moveCircles() {
 
         circles.forEach((otherCircle) => {
             if (Math.abs(circles[n].getX() - otherCircle.getX()) < 200 && Math.abs(circles[n].getY() - otherCircle.getY()) < 200) {
-                circles[n].drawLineToOtherCircle(otherCircle.getX(), otherCircle.getY());
+                circles[n].drawLineToOtherCircle(otherCircle.getX(), otherCircle.getY(), otherCircle.getRadius());
             }
         })
         circles[n].drawCircle();
@@ -112,7 +110,10 @@ class Circle {
         this.dy = Math.floor(Math.random() * (3 - (-3)) + (-3));
         this.defaultSpeedX = 0;
         this.defaultSpeedY = 0;
-
+        while(this.dx == 0 || this.dy == 0){
+            this.dx = Math.floor(Math.random() * (3 - (-3)) + (-3));
+            this.dy = Math.floor(Math.random() * (3 - (-3)) + (-3));
+        }
     }
 
     getX() {
@@ -154,6 +155,9 @@ class Circle {
     drawCircle() {
         context.beginPath();
         context.arc(this.xPos, this.yPos, this.randomRadius, 0, 2 * Math.PI);
+        context.arc(this.xPos-this.randomRadius, this.yPos, this.randomRadius, 0, 2 * Math.PI);
+
+        context.ellipse(this.xPos-this.randomRadius/2, this.yPos, this.randomRadius/1.5, 125, 22, 0, Math.PI*1);
         context.fillStyle = this.color;
         context.fill();
     }
@@ -167,10 +171,10 @@ class Circle {
         this.yPos = this.yPos + this.dy;
     }
 
-    drawLineToOtherCircle(xPosition, yPosition) {
+    drawLineToOtherCircle(xPosition, yPosition, radius) {
         context.beginPath();
-        context.moveTo(this.xPos, this.yPos)
-        context.lineTo(xPosition, yPosition);
+        context.moveTo(this.xPos-this.randomRadius/2, this.yPos)
+        context.lineTo(xPosition-radius/2, yPosition);
         context.strokeStyle = randomColor();
         context.stroke();
     }
