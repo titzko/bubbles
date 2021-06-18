@@ -24,6 +24,7 @@ canvas.addEventListener('mousedown', e => {
                 circle.getBoost();
             }
         }
+
     })
 
 })
@@ -49,8 +50,16 @@ function moveCircles() {
     requestAnimationFrame(moveCircles);
     context.clearRect(0, 0, width, height);
     for (var n = 0; n < circles.length; n++) {
+
+        circles.forEach((otherCircle) => {
+            if (Math.abs(circles[n].getX() - otherCircle.getX()) < 200 && Math.abs(circles[n].getY() - otherCircle.getY()) < 200) {
+                circles[n].drawLineToOtherCircle(otherCircle.getX(), otherCircle.getY());
+            }
+        })
         circles[n].drawCircle();
         circles[n].changeCoordinates();
+
+
 
     }
 }
@@ -68,6 +77,7 @@ function createCircles() {
 
     circles.forEach((circle) => {
         circle.drawCircle();
+
     })
 }
 
@@ -151,6 +161,14 @@ class Circle {
 
         this.xPos = this.xPos + this.dx;
         this.yPos = this.yPos + this.dy;
+    }
+
+    drawLineToOtherCircle(xPosition, yPosition) {
+        context.beginPath();
+        context.moveTo(this.xPos, this.yPos)
+        context.lineTo(xPosition, yPosition);
+        context.strokeStyle = randomColor();
+        context.stroke();
     }
 
 }
