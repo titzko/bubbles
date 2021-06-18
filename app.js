@@ -7,7 +7,9 @@ let x = 0;
 let y = 0;
 const height = document.body.clientHeight;
 const width = document.body.clientWidth;
+var amountCircles = 5;
 var circles = [];
+
 
 
 
@@ -35,6 +37,8 @@ function init() {
     canvas.style.margin = "auto";
     canvas.style.display = "block";
     createCircles();
+    document.getElementById('amountID').innerHTML = amountCircles;
+
 }
 
 function draw(context, x1, y1, x2, y2) {
@@ -69,7 +73,7 @@ function moveCircles() {
 function createCircles() {
     var xPos = 0;
     var yPos = 0;
-    for (var n = 0; n < 30; n++) {
+    for (var n = 0; n < amountCircles; n++) {
         xPos = Math.floor(Math.random() * (width - 200 + 1)) + 200;
         yPos = Math.floor(Math.random() * (height - 200 + 1)) + 200;
         circles.push(new Circle(xPos, yPos));
@@ -174,3 +178,49 @@ class Circle {
 }
 
 moveCircles();
+
+function createNewCircle() {
+    xPos = Math.floor(Math.random() * (width - 200 + 1)) + 200;
+    yPos = Math.floor(Math.random() * (height - 200 + 1)) + 200;
+    circles.push(new Circle(xPos, yPos));
+    document.getElementById('amountID').innerHTML = amountCircles;
+    amountCircles++;
+    console.log("more");
+}
+
+document.getElementById('moreID').onclick = function() {
+    createNewCircle();
+
+}
+
+function removeCircle() {
+    circles.shift();
+    amountCircles = amountCircles - 1;
+    document.getElementById('amountID').innerHTML = amountCircles;
+    console.log("less");
+}
+
+document.getElementById('lessID').onclick = function() {
+    removeCircle();
+}
+
+$("input").on("keydown", function search(e) {
+    if (e.keyCode == 13) {
+        let newAmountCircles = document.getElementById('inputID').value;
+        if (newAmountCircles > amountCircles) {
+            while (newAmountCircles > amountCircles) {
+                createNewCircle();
+            }
+        } else if (amountCircles > newAmountCircles) {
+            while (newAmountCircles < amountCircles) {
+                removeCircle();
+            }
+        }
+
+    }
+});
+
+
+//plus button
+//collision
+//nur 5 Connections

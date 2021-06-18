@@ -6,6 +6,10 @@ body {
     border: none;
 }
 
-#myCanvas {
-    border: none;
+#myHeader {
+    display: flex;
+}
+
+.headerElements {
+    padding-left: 5%;
 }
