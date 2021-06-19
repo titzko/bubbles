@@ -183,6 +183,8 @@ class Circle {
         context.moveTo(this.xPos, this.yPos)
         context.lineTo(xPosition, yPosition);
         context.strokeStyle = randomColor();
+        context.lineWidth = 3;
+
         context.stroke();
     }
 
