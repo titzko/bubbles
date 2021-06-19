@@ -9,8 +9,7 @@ const height = document.body.clientHeight;
 const width = document.body.clientWidth;
 var amountCircles = 5;
 var circles = [];
-
-
+var max_bubble_connections = 5;
 
 
 const canvas = document.getElementById("myCanvas");
@@ -53,19 +52,26 @@ function draw(context, x1, y1, x2, y2) {
 function moveCircles() {
     requestAnimationFrame(moveCircles);
     context.clearRect(0, 0, width, height);
+
     for (var n = 0; n < circles.length; n++) {
 
         circles.forEach((otherCircle) => {
-            if (Math.abs(circles[n].getX() - otherCircle.getX()) < 200 && Math.abs(circles[n].getY() - otherCircle.getY()) < 200) {
+            if (Math.abs(circles[n].getX() - otherCircle.getX()) < 200 
+                && Math.abs(circles[n].getY() - otherCircle.getY()) < 200 
+                && circles[n].getConnectedBubbles() < max_bubble_connections - 1
+                && otherCircle.getConnectedBubbles() < max_bubble_connections - 1) {
                 circles[n].drawLineToOtherCircle(otherCircle.getX(), otherCircle.getY());
+                circles[n].incrConnectedBublles();
+                otherCircle.incrConnectedBublles();
             }
         })
         circles[n].drawCircle();
         circles[n].changeCoordinates();
-
-
-
     }
+
+    circles.forEach((circle) => {
+        circle.clearConnectedBubbles();
+    })
 }
 
 
@@ -108,11 +114,11 @@ class Circle {
         this.yPos = yPos;
         this.randomRadius = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
         this.color = randomColor();
-        this.dx = Math.floor(Math.random() * (3 - (-3)) + (-3));
-        this.dy = Math.floor(Math.random() * (3 - (-3)) + (-3));
+        this.dx = Math.floor(1 + Math.random() * 3 ) * (Math.round(Math.random()) ? 1 : -1); //+ (-3));
+        this.dy = Math.floor(1 + Math.random() * 3 ) * (Math.round(Math.random()) ? 1 : -1); //+ (-3));
         this.defaultSpeedX = 0;
         this.defaultSpeedY = 0;
-
+        this.connectedBubbles = 0;
     }
 
     getX() {
@@ -125,6 +131,18 @@ class Circle {
 
     getRadius() {
         return this.randomRadius;
+    }
+
+    getConnectedBubbles() {
+        return this.connectedBubbles;
+    }
+
+    incrConnectedBublles() {
+        this.connectedBubbles++;
+    }
+
+    clearConnectedBubbles() {
+        this.connectedBubbles = 0;
     }
 
     checkCollision() {
