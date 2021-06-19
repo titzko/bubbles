@@ -9,7 +9,7 @@ const height = document.body.clientHeight;
 const width = document.body.clientWidth;
 var amountCircles = 2;
 var circles = [];
-var max_bubble_connections = 4;
+var max_bubble_connections = 5;
 
 
 const canvas = document.getElementById("myCanvas");
