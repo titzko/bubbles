@@ -7,9 +7,9 @@ let x = 0;
 let y = 0;
 const height = document.body.clientHeight;
 const width = document.body.clientWidth;
-var amountCircles = 5;
+var amountCircles = 2;
 var circles = [];
-var max_bubble_connections = 5;
+var max_bubble_connections = 4;
 
 
 const canvas = document.getElementById("myCanvas");
@@ -40,14 +40,7 @@ function init() {
 
 }
 
-function draw(context, x1, y1, x2, y2) {
-    context.beginPath();
-    context.strokeStyle = 'black';
-    context.lineWidth = 1;
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.closePath();
-}
+
 
 function moveCircles() {
     requestAnimationFrame(moveCircles);
@@ -56,10 +49,10 @@ function moveCircles() {
     for (var n = 0; n < circles.length; n++) {
 
         circles.forEach((otherCircle) => {
-            if (Math.abs(circles[n].getX() - otherCircle.getX()) < 200 
-                && Math.abs(circles[n].getY() - otherCircle.getY()) < 200 
-                && circles[n].getConnectedBubbles() < max_bubble_connections - 1
-                && otherCircle.getConnectedBubbles() < max_bubble_connections - 1) {
+            if (Math.abs(circles[n].getX() - otherCircle.getX()) < 200 &&
+                Math.abs(circles[n].getY() - otherCircle.getY()) < 200 &&
+                circles[n].getConnectedBubbles() < max_bubble_connections - 1 &&
+                otherCircle.getConnectedBubbles() < max_bubble_connections - 1) {
                 circles[n].drawLineToOtherCircle(otherCircle.getX(), otherCircle.getY());
                 circles[n].incrConnectedBublles();
                 otherCircle.incrConnectedBublles();
@@ -114,8 +107,8 @@ class Circle {
         this.yPos = yPos;
         this.randomRadius = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
         this.color = randomColor();
-        this.dx = Math.floor(1 + Math.random() * 3 ) * (Math.round(Math.random()) ? 1 : -1); //+ (-3));
-        this.dy = Math.floor(1 + Math.random() * 3 ) * (Math.round(Math.random()) ? 1 : -1); //+ (-3));
+        this.dx = Math.floor(1 + Math.random() * 3) * (Math.round(Math.random()) ? 1 : -1); //+ (-3));
+        this.dy = Math.floor(1 + Math.random() * 3) * (Math.round(Math.random()) ? 1 : -1); //+ (-3));
         this.defaultSpeedX = 0;
         this.defaultSpeedY = 0;
         this.connectedBubbles = 0;
@@ -201,7 +194,7 @@ function createNewCircle() {
     xPos = Math.floor(Math.random() * (width - 200 + 1)) + 200;
     yPos = Math.floor(Math.random() * (height - 200 + 1)) + 200;
     circles.push(new Circle(xPos, yPos));
-    document.getElementById('amountID').innerHTML = amountCircles;
+    document.getElementById('amountID').innerHTML = amountCircles + 1;
     amountCircles++;
     console.log("more");
 }
@@ -214,7 +207,7 @@ document.getElementById('moreID').onclick = function() {
 function removeCircle() {
     circles.shift();
     amountCircles = amountCircles - 1;
-    document.getElementById('amountID').innerHTML = amountCircles;
+    document.getElementById('amountID').innerHTML = amountCircles + 1;
     console.log("less");
 }
 
@@ -225,20 +218,26 @@ document.getElementById('lessID').onclick = function() {
 $("input").on("keydown", function search(e) {
     if (e.keyCode == 13) {
         let newAmountCircles = document.getElementById('inputID').value;
-        if (newAmountCircles > amountCircles) {
-            while (newAmountCircles > amountCircles) {
-                createNewCircle();
-            }
-        } else if (amountCircles > newAmountCircles) {
-            while (newAmountCircles < amountCircles) {
-                removeCircle();
-            }
+        while (newAmountCircles > amountCircles) {
+            createNewCircle();
         }
-
+        while (newAmountCircles < amountCircles) {
+            removeCircle();
+        }
     }
 });
 
+document.getElementById('numberAmountID').onclick = function() {
+    let newAmountCircles = document.getElementById('inputID').value;
+    while (newAmountCircles > amountCircles) {
+        createNewCircle();
+    }
+    while (newAmountCircles < amountCircles) {
+        removeCircle();
+    }
+}
 
-//plus button
+
 //collision
 //nur 5 Connections
+//bigger Radius on mouseover
